@@ -48,7 +48,36 @@ namespace CountryPublicHolidayWebApi.Service
 
             return response;
         }
+        private async Task<List<GetHolidayResponse>> GetHolidayFromApi(HolidayListRequest request)
+        {
+            var url = $"{_apiUrl}action=getHolidaysForYear&year={request.Year}&country={request.Country}&holidayType=all";
+            var apiResponse = await _httpClientService.Get(url);
+            var holidayInfo = JsonConvert.DeserializeObject<List<HolidayListResponse>>(apiResponse);
+            var response = new List<GetHolidayResponse>();
+            var result = holidayInfo.GroupBy(u => u.Date.Month);
+            foreach (var subHoliday in result)
+            {
+                var holidayObj = new GetHolidayResponse()
+                {
+                    Month = GetMonth(subHoliday.Key),
+                    HolidayInfo = new List<HolidayListResponse>()
+                };
+                foreach (var holiday in subHoliday)
+                {
+                    holidayObj.HolidayInfo.Add(holiday);
+                };
 
+                
+                response.Add(holidayObj);
+            }
+
+            return response;
+        }
+
+        private void StoreHolidayIntoDb()
+        { 
+        
+        }
         public async Task<int> GetMaximumNumberOfFreeDay(HolidayListRequest request)
         {
             var url = $"{_apiUrl}action=getHolidaysForYear&year={request.Year}&country={request.Country}&holidayType=all";

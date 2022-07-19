@@ -18,20 +18,18 @@ namespace DataAccess.DbContexts
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             // connect to sql server with connection string from app settings
+            options.UseLazyLoadingProxies();
             options.UseSqlServer(Configuration.GetConnectionString("HolidayDb"), b => b.MigrationsAssembly("CountryPublicHolidayWebApi"));
+            //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SupportedCountry>()
-               .HasMany(c => c.Regions).WithOne(x => x.SupportedCountry);
-            //.HasForeignKey(x => x.CategoryId); ;
-
-            //modelBuilder.Entity<Region>()
-            //    .HasOne(c => c.SupportedCountry)
-            //    .WithOne().HasForeignKey(x => x.);
-
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new SupportedCountryEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new RegionEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new HolidayEntityConfiguration());
+   
         }
     }
 }

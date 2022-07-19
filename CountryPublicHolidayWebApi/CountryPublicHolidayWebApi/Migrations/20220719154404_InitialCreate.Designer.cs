@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CountryPublicHolidayWebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220719054854_InitialCreate")]
+    [Migration("20220719154404_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,30 +32,48 @@ namespace CountryPublicHolidayWebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR(50)")
+                        .HasColumnName("Date");
 
                     b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
+                        .HasMaxLength(10)
+                        .HasColumnType("INT")
+                        .HasColumnName("DayOfWeek");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("NVARCHAR(200)")
+                        .HasColumnName("Description");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR(50)")
+                        .HasColumnName("Name");
 
-                    b.Property<int>("RegionId")
+                    b.Property<int?>("RegionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupportedCountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("NVARCHAR(100)")
+                        .HasColumnName("Type");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Holidays");
+                    b.HasIndex("RegionId")
+                        .IsUnique()
+                        .HasFilter("[RegionId] IS NOT NULL");
+
+                    b.HasIndex("SupportedCountryId")
+                        .IsUnique()
+                        .HasFilter("[SupportedCountryId] IS NOT NULL");
+
+                    b.ToTable("Holiday", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Entity.Region", b =>
@@ -67,16 +85,18 @@ namespace CountryPublicHolidayWebApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR(50)")
+                        .HasColumnName("Name");
 
-                    b.Property<int?>("SupportedCountryId")
+                    b.Property<int>("SupportedCountryId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SupportedCountryId");
 
-                    b.ToTable("Regions");
+                    b.ToTable("Region", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Entity.SupportedCountry", b =>
@@ -88,30 +108,57 @@ namespace CountryPublicHolidayWebApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CountryCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR(50)")
+                        .HasColumnName("CountryCode");
 
                     b.Property<string>("CountryName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR(50)")
+                        .HasColumnName("CountryName");
 
                     b.Property<string>("FromDate")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("NVARCHAR(100)")
+                        .HasColumnName("FromDate");
 
                     b.Property<string>("HolidayTypes")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("NVARCHAR(500)")
+                        .HasColumnName("HolidayTypes");
 
                     b.Property<string>("ToDate")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("NVARCHAR(100)")
+                        .HasColumnName("ToDate");
 
                     b.HasKey("Id");
 
-                    b.ToTable("SupportedCountry");
+                    b.ToTable("SupportedCountry", (string)null);
+                });
+
+            modelBuilder.Entity("DataAccess.Entity.Holiday", b =>
+                {
+                    b.HasOne("DataAccess.Entity.Region", "Region")
+                        .WithOne()
+                        .HasForeignKey("DataAccess.Entity.Holiday", "RegionId");
+
+                    b.HasOne("DataAccess.Entity.SupportedCountry", "SupportedCountry")
+                        .WithOne()
+                        .HasForeignKey("DataAccess.Entity.Holiday", "SupportedCountryId");
+
+                    b.Navigation("Region");
+
+                    b.Navigation("SupportedCountry");
                 });
 
             modelBuilder.Entity("DataAccess.Entity.Region", b =>
                 {
                     b.HasOne("DataAccess.Entity.SupportedCountry", "SupportedCountry")
                         .WithMany("Regions")
-                        .HasForeignKey("SupportedCountryId");
+                        .HasForeignKey("SupportedCountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("SupportedCountry");
                 });
