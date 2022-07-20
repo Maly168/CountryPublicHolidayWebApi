@@ -12,7 +12,7 @@ namespace CountryPublicHolidayWebApi.Filters
             var request = context.ActionArguments.Values.FirstOrDefault() as HolidayListRequest;
             if (!IsValidateRequest(request))
             {
-                throw new HolidayExceptionFilter(404, "Bad Request");
+                throw new ApiExceptionFilter(404, "Bad Request");
             };
 
         }
@@ -21,7 +21,7 @@ namespace CountryPublicHolidayWebApi.Filters
         {
             if (request == null || string.IsNullOrEmpty(request.Country)
                 || string.IsNullOrEmpty(request.Year.ToString())
-                || request.Year == 0)
+                || !int.TryParse(request.Year.ToString(), out int number))
             { 
                 return false;
             }

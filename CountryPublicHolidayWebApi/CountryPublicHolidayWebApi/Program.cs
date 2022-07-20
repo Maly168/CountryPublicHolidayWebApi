@@ -19,20 +19,9 @@ builder.Services.AddSwaggerDocument(config =>
     config.PostProcess = document =>
     {
         document.Info.Version = "v1";
-        document.Info.Title = "Country Api";
-        document.Info.Description = "List all the calendar in some countries";
+        document.Info.Title = "CountryPublicHolidayApi";
+        document.Info.Description = "List public holiday api and supported countries";
         document.Info.TermsOfService = "None";
-        document.Info.Contact = new NSwag.OpenApiContact
-        {
-            Name = "Maly",
-            Email = string.Empty,
-            Url = "https://twitter.com/spboyer"
-        };
-        document.Info.License = new NSwag.OpenApiLicense
-        {
-            Name = "Use under LICX",
-            Url = "https://example.com/license"
-        };
     };
 });
 

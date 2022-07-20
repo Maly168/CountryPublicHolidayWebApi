@@ -7,7 +7,7 @@ namespace CountryPublicHolidayWebApi.Service
     {
         Task<List<SupportedCountryResponse>> GetSupportedCountry();
         Task<List<GetHolidayResponse>> GetHoliday(HolidayListRequest request);
-        Task<int> GetMaximumNumberOfFreeDay(HolidayListRequest request);
-        Task<int> GetDayStatus(GetDayStatusRequest request);
+        Task<int> GetMaximumNumberOfFreeDayAndHoliday(HolidayListRequest request);
+        Task<GetDayStatusResponse> GetSpecificDayStatus(GetDayStatusRequest request);
     }
 }

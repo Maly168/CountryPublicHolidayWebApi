@@ -51,7 +51,9 @@ namespace CountryPublicHolidayWebApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
+                    SearchCountry = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
+                    SearchYear = table.Column<int>(type: "INT", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
                     Type = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: true),
                     DayOfWeek = table.Column<int>(type: "INT", maxLength: 10, nullable: false),
                     Date = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),

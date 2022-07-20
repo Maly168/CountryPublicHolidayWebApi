@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CountryPublicHolidayWebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220719154404_InitialCreate")]
+    [Migration("20220720135558_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,12 +48,22 @@ namespace CountryPublicHolidayWebApi.Migrations
                         .HasColumnName("Description");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                        .HasMaxLength(500)
+                        .HasColumnType("NVARCHAR(500)")
                         .HasColumnName("Name");
 
                     b.Property<int?>("RegionId")
                         .HasColumnType("int");
+
+                    b.Property<string>("SearchCountry")
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR(50)")
+                        .HasColumnName("SearchCountry");
+
+                    b.Property<int>("SearchYear")
+                        .HasMaxLength(50)
+                        .HasColumnType("INT")
+                        .HasColumnName("SearchYear");
 
                     b.Property<int?>("SupportedCountryId")
                         .HasColumnType("int");

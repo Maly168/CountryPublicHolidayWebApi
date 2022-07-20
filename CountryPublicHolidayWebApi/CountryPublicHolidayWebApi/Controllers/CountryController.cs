@@ -26,6 +26,7 @@ namespace CountryPublicHolidayWebApi.Controllers
         }
 
         [HttpPost("GetHoliday")]
+        [ServiceFilter(typeof(RequestFilter))]
         public async Task<List<GetHolidayResponse>> GetHoliday(HolidayListRequest request)
         {
             return await _countryService.GetHoliday(request);
@@ -34,13 +35,13 @@ namespace CountryPublicHolidayWebApi.Controllers
         [HttpPost("GetMaximumNumberOfFreeDay")]
         public async Task<int> GetMaximumNumberOfFreeDay(HolidayListRequest request)
         {
-            return await _countryService.GetMaximumNumberOfFreeDay(request);
+            return await _countryService.GetMaximumNumberOfFreeDayAndHoliday(request);
         }
 
         [HttpPost("GetDayStatus")]
-        public async Task<int> GetDayStatus(GetDayStatusRequest request)
+        public async Task<GetDayStatusResponse> GetDayStatus(GetDayStatusRequest request)
         {
-            return await _countryService.GetDayStatus(request);
+            return await _countryService.GetSpecificDayStatus(request);
         }
     }
 }

@@ -13,5 +13,6 @@ namespace CountryPublicHolidayWebApi.Model.Request
     public class GetDayStatusRequest
     {
         public string Date { get; set; }
+        public string Country { get; set; }
     }
 }

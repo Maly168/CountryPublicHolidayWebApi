@@ -34,9 +34,9 @@ namespace CountryPublicHolidayWebApi.Model.Response
         public string Month { get; set; }
         public List<HolidayListResponse> HolidayInfo { get; set; }
     }
-
-    public class ApiResponse
+    public class ApiErrorResponse
     {
-        
+        [JsonProperty("error")]
+        public string Error { get; set; }
     }
 }
