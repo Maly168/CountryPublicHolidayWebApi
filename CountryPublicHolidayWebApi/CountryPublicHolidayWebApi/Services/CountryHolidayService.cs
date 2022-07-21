@@ -6,15 +6,15 @@ using DataAccess.Entity;
 using Newtonsoft.Json;
 using System.Data.Entity;
 
-namespace CountryPublicHolidayWebApi.Service
+namespace CountryPublicHolidayWebApi.Services
 {
-    public class CountryService : ICountryService
+    public class CountryHolidayService : ICountryHolidayService
     {
         private readonly IHttpClientService _httpClientService;
         private readonly string _apiUrl;
         private DataContext _dataContext;
 
-        public CountryService(IHttpClientService httpClientService,
+        public CountryHolidayService(IHttpClientService httpClientService,
             IConfiguration configuration, DataContext dataContext)
         {
             _httpClientService = httpClientService;
@@ -66,16 +66,22 @@ namespace CountryPublicHolidayWebApi.Service
             return await GetMaximumNumberOfFreeDayAndHolidayFromApi(request);
         }
 
-        private async Task<GetDayStatusResponse> GetSpecificDayStatusFromApi(GetDayStatusRequest request)
+        public async Task<GetDayStatusResponse> GetSpecificDayStatusFromApi(GetDayStatusRequest request)
         {
             var url = $"{_apiUrl}action=isWorkDay&date={request.Date}&country={request.Country}";
             var apiResponse = await _httpClientService.Get(url);
+
+            if (apiResponse.Contains("error"))
+            {
+                var errorMessage = JsonConvert.DeserializeObject<ApiErrorResponse>(apiResponse);
+                throw new ApiErrorException(errorMessage.Error);
+            }
             var dayStatus = JsonConvert.DeserializeObject<GetDayStatusResponse>(apiResponse);
 
             return dayStatus;
         }
 
-        private async Task<List<Holiday>> GetSpecificDayStatusFromDB(GetDayStatusRequest request)
+        public async Task<List<Holiday>> GetSpecificDayStatusFromDB(GetDayStatusRequest request)
         {
             var dayStatus = _dataContext.Holidays.Where(h => h.Date == request.Date
                              && h.SearchCountry == request.Country).ToList();
@@ -99,6 +105,11 @@ namespace CountryPublicHolidayWebApi.Service
                 var errorMessage = JsonConvert.DeserializeObject<ApiErrorResponse>(apiResponse);
                 throw new ApiErrorException(errorMessage.Error);
             }
+            if (apiResponse.Contains("error"))
+            {
+                var errorMessage = JsonConvert.DeserializeObject<ApiErrorResponse>(apiResponse);
+                throw new ApiErrorException(errorMessage.Error);
+            }
             var response = JsonConvert.DeserializeObject<List<HolidayListResponse>>(apiResponse);
             StoreHolidayIntoDb(response, request);
             return response.Count;
@@ -108,6 +119,11 @@ namespace CountryPublicHolidayWebApi.Service
         {
             var url = $"{_apiUrl}action=getSupportedCountries";
             var apiResponse = await _httpClientService.Get(url);
+            if (apiResponse.Contains("error"))
+            {
+                var errorMessage = JsonConvert.DeserializeObject<ApiErrorResponse>(apiResponse);
+                throw new ApiErrorException(errorMessage.Error);
+            }
             var supportedCountries = JsonConvert.DeserializeObject<List<SupportedCountryResponse>>(apiResponse);
             StoreSupportedCountry(supportedCountries);
 
@@ -198,7 +214,13 @@ namespace CountryPublicHolidayWebApi.Service
         {
             var url = $"{_apiUrl}action=getHolidaysForYear&year={request.Year}&country={request.Country}&holidayType=all";
             var apiResponse = await _httpClientService.Get(url);
+            if (apiResponse.Contains("error"))
+            {
+                var errorMessage = JsonConvert.DeserializeObject<ApiErrorResponse>(apiResponse);
+                throw new ApiErrorException(errorMessage.Error);
+            }
             var holidayInfo = JsonConvert.DeserializeObject<List<HolidayListResponse>>(apiResponse);
+           
             StoreHolidayIntoDb(holidayInfo, request);
             var response = new List<GetHolidayResponse>();
             var result = holidayInfo.GroupBy(u => u.Date.Month);

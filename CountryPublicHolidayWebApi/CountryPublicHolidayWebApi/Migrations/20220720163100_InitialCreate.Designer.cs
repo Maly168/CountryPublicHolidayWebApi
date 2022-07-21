@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CountryPublicHolidayWebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220720135558_InitialCreate")]
+    [Migration("20220720163100_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

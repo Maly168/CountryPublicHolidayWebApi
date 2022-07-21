@@ -1,5 +1,5 @@
 using CountryPublicHolidayWebApi.Filters;
-using CountryPublicHolidayWebApi.Service;
+using CountryPublicHolidayWebApi.Services;
 using DataAccess.DbContexts;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
-builder.Services.AddScoped<ICountryService, CountryService>();
+builder.Services.AddScoped<ICountryHolidayService, CountryHolidayService>();
 builder.Services.TryAddSingleton<RequestFilter>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

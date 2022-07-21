@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  countrypublicholidaywebapi:
+    image: ${DOCKER_REGISTRY-}countrypublicholidaywebapi
+    build:
+      context: .
+      dockerfile: CountryPublicHolidayWebApi/Dockerfile

@@ -1,4 +1,4 @@
-﻿namespace CountryPublicHolidayWebApi.Service
+﻿namespace CountryPublicHolidayWebApi.Services
 {
     public interface IHttpClientService
     {

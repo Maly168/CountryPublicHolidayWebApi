@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 
-namespace CountryPublicHolidayWebApi.Service
+namespace CountryPublicHolidayWebApi.Services
 {
     public class HttpClientService : IHttpClientService
     {

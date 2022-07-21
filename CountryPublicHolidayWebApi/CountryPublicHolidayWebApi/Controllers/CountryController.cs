@@ -1,7 +1,7 @@
 ﻿using CountryPublicHolidayWebApi.Filters;
 using CountryPublicHolidayWebApi.Model.Request;
 using CountryPublicHolidayWebApi.Model.Response;
-using CountryPublicHolidayWebApi.Service;
+using CountryPublicHolidayWebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +12,9 @@ namespace CountryPublicHolidayWebApi.Controllers
     [ApiController]
     public class CountryController : ControllerBase
     {
-        private readonly ICountryService _countryService;
+        private readonly ICountryHolidayService _countryService;
 
-        public CountryController(ICountryService countryService)
+        public CountryController(ICountryHolidayService countryService)
         {
             _countryService = countryService;
         }
