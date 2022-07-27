@@ -30,26 +30,13 @@ namespace CountryPublicHolidayWebApi.Services
                     Content = new StringContent(contentBody, Encoding.UTF8, "application/json")
                 };
 
-                //request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                //request.Headers.TryAddWithoutValidation("Authorization", info.Authorization);
-                //request.Headers.TryAddWithoutValidation("Date", info.HeaderDate);
-
-                //request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                //request.Content.Headers.TryAddWithoutValidation("Content-MD5", info.ContentMD5);
-
-                //_logger.Info($"Request to provider: {JsonConvert.SerializeObject(request)}, request body: {JsonConvert.SerializeObject(requestBody)}");
-
+               
                 var response = await _httpClient.SendAsync(request);
                 var responseBody = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
+                    //Write log here
                     //_logger.Info($"Success: responseBody => {responseBody}");
-                }
-                else
-                {
-                    //_logger.Error(
-                    //       $"[[Response] URL: {requestUrl}, StatusCode : {(int)response.StatusCode}," +
-                    //       $" ResponseBody :{response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}");
                 }
 
                 return responseBody;
